@@ -1,0 +1,55 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<form method="POST">
+    <div class="form-group">
+        <label>Sample</label>
+        <input name="sample" type="text" class="form-control" value={{sample}}>
+    </div>
+
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+<p></p>
+<div class="card">
+    <div class="card-body">
+        <label>Totoal number</label>
+        {{rulenumber}}
+
+
+    </div>
+</div>
+<div>
+    {% for rule in data %}
+    <div class="card">
+        <div class="card-body">
+            <p name="{{rule['crime']}}">
+
+                <pre id="json">{{rule['obj']}}</pre>
+
+
+                <div class="container">
+                    <div class="row">
+
+                        <div class="col-sm">
+                            <label>API 1</label>
+                            <p class="h3"> {{ rule["rule"]['x2n3n4_comb'][0]['class'] }}</p>
+                            <p class="h3"> {{ rule["rule"]['x2n3n4_comb'][0]['method'] }}</p>
+                        </div>
+
+                        <div class="col-sm">
+                            <label>API 2</label>
+                            <p class="h3"> {{ rule["rule"]['x2n3n4_comb'][1]['class'] }}</p>
+                            <p class="h3"> {{ rule["rule"]['x2n3n4_comb'][1]['method'] }}</p>
+
+                        </div>
+                    </div>
+                </div>
+
+                <button type="export" class="btn btn-primary">export</button>
+
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
