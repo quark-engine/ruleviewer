@@ -1,7 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-
-
 <html lang="en">
 
 <head>
@@ -26,44 +23,41 @@
             <div class="starter-template">
                 <hr style="padding-top: 100px;">
 
-                
-                    <div class="form-group">
-                        <label>Keyword</label>
-                        <input id="keyword" name="sample" type="text" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label>Label</label>
-                        <input id="label" name="sample" type="text" class="form-control">
-                    </div>
-
-
-                    <button id="submit" type="submit" class="btn btn-primary">Filter</button>
-                
-                <p></p>
-                <div class="card">
-                    <div class="card-body">
-                        <label>Totoal number</label>
-                        {{rulenumber}}
-
-
-                    </div>
-                </div>
-                <div>
-                    <div class="card">
-                        <div class="card-body">
-                            <p name="{{rule['crime']}}">
-
-                                
-
-
-                                <div id="rules-content" class="container">
-                                    
-                                </div>
-
-                                <button type="export" class="btn btn-primary">export</button>
-
-                        </div>
-                    </div>
+                <label> 
+                    <input class="rule-label" type="checkbox" name="label" value="collection"> collection 
+                </label>
+                <label> 
+                    <input class="rule-label" type="checkbox" name="label" value="control"> control 
+                </label> 
+                <label> 
+                    <input class="rule-label" type="checkbox" name="label" value="camera"> camera 
+                </label> 
+                <label> 
+                    <input class="rule-label" type="checkbox" name="label" value="calllog"> calllog 
+                </label> 
+                <label> 
+                    <input class="rule-label" type="checkbox" name="label" value="location"> location 
+                </label> 
+                <label> 
+                    <input class="rule-label" type="checkbox" name="label" value="sms"> sms 
+                </label> 
+                <label> 
+                    <input class="rule-label" type="checkbox" name="label" value="file"> file 
+                </label> 
+                <label> 
+                    <input class="rule-label" type="checkbox" name="label" value="network"> network 
+                </label> 
+                <label> 
+                    <input class="rule-label" type="checkbox" name="label" value="reflection"> reflection 
+                </label> 
+                <label> 
+                    <input class="rule-label" type="checkbox" name="label" value="record"> record 
+                </label> 
+                <label> 
+                    <input class="rule-label" type="checkbox" name="label" value="wifi"> wifi 
+                </label>                 
+                <div id="rules-content">
+                    
 
                 </div>
             </div>
@@ -74,7 +68,7 @@
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    
+
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
         integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous">
     </script>
@@ -85,59 +79,61 @@
         integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous">
     </script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    
+
     <script>
+
         function pad(num, size) {
             var s = "000000" + num;
-            return s.substr(s.length-size);
+            return s.substr(s.length - size);
         }
-        
-        function filter(rules, label, keyword, callback){
-            var newRules = []
-            
-            rules.forEach(function(rule){
-                $.when(rule).then(function(content){
-                    
-                    if (content["label"] === label){
-                        document.getElementById('rules-content').innerHTML += '<pre>' + JSON.stringify(content, undefined, 4) + '</pre>';
-                        return
-                    }
-                    if (content["crime"].includes(keyword)){
-                        document.getElementById('rules-content').innerHTML += '<pre>' + JSON.stringify(content, undefined, 4) + '</pre>';
-                        return
-                    }
-                })
+
+        function getRules(){
+            (async() => {
+                ruleNumber = 1
+                check = true
+                while(ruleNumber<200 && check){
+
+                    id = pad(ruleNumber, 5);
+                    let ruleData = await $.getJSON("https://raw.githubusercontent.com/quark-engine/quark-rules/master/" + id + ".json")
+                        .fail(function() {  check = false });
+
+                    document.getElementById('rules-content').innerHTML += '<div id="' + id + '" class="card rule-json"><div class="card-body"><div class="container"><pre>' + JSON.stringify(
+                            ruleData, undefined, 4) + '</pre></div></div></div>';
+
+                    console.log(ruleNumber)
+                    ruleNumber++;
                 
-            })
+                }
+            })()
             
-            console.log(newRules)
-            newRules.forEach(function(rule){
-                console.log("fuck");
-                document.getElementById('rules-content').innerHTML += '<pre>' + JSON.stringify(rule, undefined, 4) + '</pre>';
-            });
+            
         }
 
-        $("#submit").click(function(){
-            document.getElementById('rules-content').innerHTML = ""
+        getRules()
 
-            var rulesId = new Array()
-            for (i=1 ; i<=63 ; i++){
-                num = pad(i, 5)
-                rulesId.push(num)
+        $(".rule-label").click(function () {
+                        
+            rules = document.getElementsByClassName("rule-json")
+            var labels = []
+
+            $("input:checkbox[name=label]:checked").each(function(){
+                labels.push($(this).val());
+            });
+            
+            for (i = 0; i < rules.length; i++) {
+
+                var obj = JSON.parse(rules[i].innerText)
+                document.getElementById(rules[i].id).style.display = "none";
+
+                if ( labels.every( r => obj.label.includes(r) )){
+                    document.getElementById(rules[i].id).style.display = "block";
+                }
+              
             }
-            var rules = rulesId.map(function(id){
-                return $.getJSON("https://raw.githubusercontent.com/quark-engine/quark-rules/master/" + id + ".json")
-            })
-
-            var keyword = document.getElementById("keyword").value
-            var label = document.getElementById("label").value
-            filter(rules, "", keyword);
 
         })
-        
     </script>
 
 </body>
 
 </html>
-
