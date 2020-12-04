@@ -1,3 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+
 <html lang="en">
 
 <head>
@@ -22,15 +26,19 @@
             <div class="starter-template">
                 <hr style="padding-top: 100px;">
 
-                <form method="POST">
+                
                     <div class="form-group">
-                        <label>Sample</label>
-                        <input name="sample" type="text" class="form-control" value={{sample}}>
+                        <label>Keyword</label>
+                        <input id="keyword" name="sample" type="text" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Label</label>
+                        <input id="label" name="sample" type="text" class="form-control">
                     </div>
 
 
-                    <button type="submit" class="btn btn-primary">Filter</button>
-                </form>
+                    <button id="submit" type="submit" class="btn btn-primary">Filter</button>
+                
                 <p></p>
                 <div class="card">
                     <div class="card-body">
@@ -45,25 +53,11 @@
                         <div class="card-body">
                             <p name="{{rule['crime']}}">
 
-                                <pre id="json">{{rule['obj']}}</pre>
+                                
 
 
-                                <div class="container">
-                                    <div class="row">
-
-                                        <div class="col-sm">
-                                            <label>API 1</label>
-                                            <p class="h3"> {{ rule["rule"]['x2n3n4_comb'][0]['class'] }}</p>
-                                            <p class="h3"> {{ rule["rule"]['x2n3n4_comb'][0]['method'] }}</p>
-                                        </div>
-
-                                        <div class="col-sm">
-                                            <label>API 2</label>
-                                            <p class="h3"> {{ rule["rule"]['x2n3n4_comb'][1]['class'] }}</p>
-                                            <p class="h3"> {{ rule["rule"]['x2n3n4_comb'][1]['method'] }}</p>
-
-                                        </div>
-                                    </div>
+                                <div id="rules-content" class="container">
+                                    
                                 </div>
 
                                 <button type="export" class="btn btn-primary">export</button>
@@ -80,6 +74,7 @@
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
+    
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
         integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous">
     </script>
@@ -89,6 +84,59 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
         integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous">
     </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    
+    <script>
+        function pad(num, size) {
+            var s = "000000" + num;
+            return s.substr(s.length-size);
+        }
+        
+        function filter(rules, label, keyword, callback){
+            var newRules = []
+            
+            rules.forEach(function(rule){
+                $.when(rule).then(function(content){
+                    
+                    if (content["label"] === label){
+                        document.getElementById('rules-content').innerHTML += '<pre>' + JSON.stringify(content, undefined, 4) + '</pre>';
+                        return
+                    }
+                    if (content["crime"].includes(keyword)){
+                        document.getElementById('rules-content').innerHTML += '<pre>' + JSON.stringify(content, undefined, 4) + '</pre>';
+                        return
+                    }
+                })
+                
+            })
+            
+            console.log(newRules)
+            newRules.forEach(function(rule){
+                console.log("fuck");
+                document.getElementById('rules-content').innerHTML += '<pre>' + JSON.stringify(rule, undefined, 4) + '</pre>';
+            });
+        }
+
+        $("#submit").click(function(){
+            document.getElementById('rules-content').innerHTML = ""
+
+            var rulesId = new Array()
+            for (i=1 ; i<=63 ; i++){
+                num = pad(i, 5)
+                rulesId.push(num)
+            }
+            var rules = rulesId.map(function(id){
+                return $.getJSON("https://raw.githubusercontent.com/quark-engine/quark-rules/master/" + id + ".json")
+            })
+
+            var keyword = document.getElementById("keyword").value
+            var label = document.getElementById("label").value
+            filter(rules, "", keyword);
+
+        })
+        
+    </script>
+
 </body>
 
 </html>
