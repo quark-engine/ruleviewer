@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <link rel="icon" href="../../../../favicon.ico">
+    <!-- <link rel="icon" href="../../../../favicon.ico"> -->
 
     <title></title>
 
@@ -33,20 +33,26 @@
         box-shadow: 10px 10px 5px #aaaaaa;
     }
 
-
-
     .label-group {
-        padding: 30px
+        padding: 14px
     }
 
     .group-title {
         padding: 30px;
+        
     }
-
-
+    .jsonkey-container {
+        font-size: 1rem;
+        background: #ffc10747;
+        display: inline-block;
+        position: relative;
+        padding: 5px;
+        margin-left: 12px ;
+    }
 
     /* Customize the label (the container) */
     .label-container {
+        font-size: 1rem;
         background: #ffa9a9;
         display: inline-block;
         position: relative;
@@ -124,78 +130,177 @@
         margin-left: auto;
         margin-right: auto;
     }
+    #myInput {
+        background-image: url('/css/searchicon.png'); /* Add a search icon to input */
+        background-position: 10px 12px; /* Position the search icon */
+        background-repeat: no-repeat; /* Do not repeat the icon image */
+        width: 100%; /* Full-width */
+        font-size: 16px; /* Increase font-size */
+        padding: 12px 20px 12px 40px;
+        border:2px solid #aaa;
+        border-radius:4px;
+    }
+    .highlight {
+        background-color: yellow;
+    }
+    .card-header{
+        padding: 0.75rem 1.25rem;
+        margin-bottom: 0;
+        background-color: rgb(255 255 255);
+        border-bottom: 1px solid rgba(0,0,0,.125);
+    }
+    .btn-link{
+        font-weight: 400;
+        color: #343c84;
+        text-decoration: none;
+    }
+    .expand-click{
+        padding: 10px;
+        cursor: pointer;
+    }
+    .collapsible {
+        background-color: #28809c38;
+        color: #545b62;
+        cursor: pointer;
+        padding: 10px;
+        width: 100%;
+        border: none;
+        /* text-align: left; */
+        outline: none;
+        font-size: 15px;
+        border: 0;
+    }
+
+    /* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+    .active, .collapsible:hover {
+        background-color: #ccc;
+    }
+
+/* Style the collapsible content. Note: hidden by default */
+    .content {
+        padding: 0 18px;
+        display: none;
+        overflow: hidden;
+        background-color: #f1f1f1;
+    }
+    pre{
+        display: block;
+        font-size: 87.5%;
+        color: #212529;
+        font-family: monospace;
+
+    }
 </style>
 
 <body>
-
-
-
     <main role="main" class="container">
         <div class="container">
             <div class="starter-template">
          
                 <img class="logo" src="quark-logo.png">
-
                 <div class="filter-container">
                     <div class="row">
-                        <div class="col-sm-3">
+                        <div class="col-sm-12">
                             <div class="group-title">
-                                <h4>Detection Rules' Key Words Label</h4>
+                                <h4>Detection Rules' Key Words Searching</h4>
                             </div>
-                            <p style="padding-left: 30px;padding-bottom: 20px;">
-                                Select a label to view related rules.
-                            </p>
-                        </div>
-                        <div class="col-sm-9">
-                            <div class="label-group">
-                                <label id="collection" class="label-container">COLLECTION
-                                    <input class="rule-label" type="checkbox" name="label" value="collection">
-                                    <span class="checkmark"></span>
-                                </label>
-                                <label id="control" class="label-container">CONTROL
-                                    <input class="rule-label" type="checkbox" name="label" value="control">
-                                    <span class="checkmark"></span>
-                                </label>
-                                <label id="camera" class="label-container">CAMERA
-                                    <input class="rule-label" type="checkbox" name="label" value="camera">
-                                    <span class="checkmark"></span>
-                                </label>
-                                <label id="sms" class="label-container">SMS
-                                    <input class="rule-label" type="checkbox" name="label" value="sms">
-                                    <span class="checkmark"></span>
-                                </label>
-                                <label id="file" class="label-container">FILE
-                                    <input class="rule-label" type="checkbox" name="label" value="file">
-                                    <span class="checkmark"></span>
-                                </label>
-                                <label id="location" class="label-container">LOCATION
-                                    <input class="rule-label" type="checkbox" name="label" value="location">
-                                    <span class="checkmark"></span>
-                                </label>
-                                <label id="network" class="label-container">NETWORK
-                                    <input class="rule-label" type="checkbox" name="label" value="network">
-                                    <span class="checkmark"></span>
-                                </label>
-                                <label id="reflection" class="label-container">REFLECTION
-                                    <input class="rule-label" type="checkbox" name="label" value="reflection">
-                                    <span class="checkmark"></span>
-                                </label>
-                                <label id="record" class="label-container">RECORD
-                                    <input class="rule-label" type="checkbox" name="label" value="record">
-                                    <span class="checkmark"></span>
-                                </label>
-                                <label id="wifi" class="label-container">WIFI
-                                    <input class="rule-label" type="checkbox" name="label" value="wifi">
-                                    <span class="checkmark"></span>
-                                </label>
-                                <label id="calllog" class="label-container">CALLLOG
-                                    <input class="rule-label" type="checkbox" name="label" value="calllog">
-                                    <span class="checkmark"></span>
-                                </label>
-
-
-
+                            <div style="padding-left: 30px;padding-right: 30px;">
+                                <input type="text" id="myInput" onkeyup="searchFilter()" placeholder="Search for rules..">
                             </div>
+                            <div class="group-title" style="padding-bottom: 12px">
+                                <p style="font-size: 1.3rem;font-weight: 600;">You can use symbols or keywords in your search to make your search results more precise.</p>
+                                <p style="font-size: 1.1rem;font-weight: 300;">
+                                    &emsp;&emsp;- &emsp;Use <span style="font-family:monospace; color:green">AND</span> to narrow your search. E.g., <span style="font-family:monospace; color:green">sms AND address</span>.<br>
+                                    &emsp;&emsp;- &emsp;Use <span style="font-family:monospace; color:green">OR</span> to combine your search. E.g., <span style="font-family:monospace; color:green">sms OR location</span>.<br>
+                                    &emsp;&emsp;- &emsp;Use "<span style="font-family:monospace; color:green">&ltjson key&gt:</span>" to search for specific rule data. E.g., <span style="font-family:monospace; color:green">label:camera</span> or <span style="font-family:monospace; color:green">api1.method:takePicture</span>.<br>
+                                    &emsp;&emsp;- &emsp;Use 
+                                        <span style="font-family:monospace; color:green">AND</span>, 
+                                        <span style="font-family:monospace; color:green">OR</span>, 
+                                        "<span style="font-family:monospace; color:green">&ltjson key&gt:</span>" together. E.g., <span style="font-family:monospace; color:green">api1.method:open AND api2.method:takePicture</span>.<br>
+                                </p>
+                            </div>
+
+                            <!-- Doing Collapse -->
+                            <div class="card" style="border: 0;">
+                                <button class="collapsible" data-toggle="collapse" data-target="#collapse-labelcard" aria-expanded="true" aria-controls="collapse">
+                                Click here to see the json keys and labels in Quark Rule.
+                                </button>
+                                <div id="collapse-labelcard" class="collapse" aria-labelledby="heading" data-parent="#accordion">
+                                    <div class="card-body" style="background-color: #f5fdff;">
+                                        <div class="group-title" style="padding-top:0;padding-bottom:0">
+                                            <h5 style="font-size: 1.3rem;font-weight: 600; padding-bottom: 0;padding-top: 0;">Here are the json keys in Quark Rule:</h5>
+                                        </div>
+                                        <div class="label-group">
+                                                <label class="jsonkey-container">crime</label>
+                                                <label class="jsonkey-container">permission</label>
+                                                <label class="jsonkey-container">api.method</label>
+                                                <label class="jsonkey-container">api.class</label>
+                                                <label class="jsonkey-container">api.descriptor</label>
+                                                <label class="jsonkey-container">score</label>
+                                                <label class="jsonkey-container">label</label>
+                                                <label class="jsonkey-container">number</label>
+                                        </div>
+                                        <div class="group-title" style="padding-top:0;padding-bottom:0">
+                                            <h5 style="font-size: 1.3rem;font-weight: 600; padding-bottom: 0;padding-top: 0;">You can select a label to view related rules.</h5>
+                                        </div>
+                                        <div class="label-group">
+                                            <label id="collection" class="label-container">collection
+                                                <input class="rule-label" type="checkbox" name="label" value="collection">
+                                                <span class="checkmark"></span>
+                                            </label>
+                                            <label id="command" class="label-container">command
+                                                <input class="rule-label" type="checkbox" name="label" value="command">
+                                                <span class="checkmark"></span>
+                                            </label>
+                                            <label id="evasion" class="label-container">evasion
+                                                <input class="rule-label" type="checkbox" name="label" value="evasion">
+                                                <span class="checkmark"></span>
+                                            </label>
+                                            <label id="control" class="label-container">control
+                                                <input class="rule-label" type="checkbox" name="label" value="control">
+                                                <span class="checkmark"></span>
+                                            </label>
+                                            <label id="camera" class="label-container">camera
+                                                <input class="rule-label" type="checkbox" name="label" value="camera">
+                                                <span class="checkmark"></span>
+                                            </label>
+                                            <label id="sms" class="label-container">sms
+                                                <input class="rule-label" type="checkbox" name="label" value="sms">
+                                                <span class="checkmark"></span>
+                                            </label>
+                                            <label id="file" class="label-container">file
+                                                <input class="rule-label" type="checkbox" name="label" value="file">
+                                                <span class="checkmark"></span>
+                                            </label>
+                                            <label id="location" class="label-container">location
+                                                <input class="rule-label" type="checkbox" name="label" value="location">
+                                                <span class="checkmark"></span>
+                                            </label>
+                                            <label id="network" class="label-container">network
+                                                <input class="rule-label" type="checkbox" name="label" value="network">
+                                                <span class="checkmark"></span>
+                                            </label>
+                                            <label id="reflection" class="label-container">reflection
+                                                <input class="rule-label" type="checkbox" name="label" value="reflection">
+                                                <span class="checkmark"></span>
+                                            </label>
+                                            <label id="record" class="label-container">record
+                                                <input class="rule-label" type="checkbox" name="label" value="record">
+                                                <span class="checkmark"></span>
+                                            </label>
+                                            <label id="wifi" class="label-container">wifi
+                                                <input class="rule-label" type="checkbox" name="label" value="wifi">
+                                                <span class="checkmark"></span>
+                                            </label>
+                                            <label id="calllog" class="label-container">calllog
+                                                <input class="rule-label" type="checkbox" name="label" value="calllog">
+                                                <span class="checkmark"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -227,95 +332,331 @@
         document.getElementById('collection').style.background = "#ffcdd2";
         document.getElementById('control').style.background = "#d1c4e9";
         document.getElementById('sms').style.background = "#b3e5fc";
-        document.getElementById('file').style.background = "#42a5f5";
+        document.getElementById('file').style.background = "#acc4f6";
         document.getElementById('camera').style.background = "#c8e6c9";
         document.getElementById('network').style.background = "#fff9c4";
         document.getElementById('calllog').style.background = "#ffccbc";
         document.getElementById('wifi').style.background = "#cfd8dc";
-        document.getElementById('location').style.background = "#66bb6a";
-        document.getElementById('record').style.background = "#ff9800";
-        document.getElementById('reflection').style.background = "#ff80ab";
+        document.getElementById('location').style.background = "#00de3c69";
+        document.getElementById('record').style.background = "#ffdca9";
+        document.getElementById('reflection').style.background = "#fdb2ff";
+        document.getElementById('command').style.background = "#f0e3ff";
 
+        function genHTML(ruleData) {
+            ruleHtml =
+                '<div class="card" id="rule' + ruleData.number + '">' +
+                '<div class="card-header" id="heading' + ruleData.number + '">' +
+                '<h5 class="mb-0">' +
+                '<div class="row"><div class="col-sm-10">' +
+                '<button class="btn btn-link" data-toggle="collapse" data-target="#collapse' + ruleData.number +
+                '"' +
+                'aria-expanded="true" aria-controls="collapse' + ruleData.number + '">' + ruleData.crime +
 
+                '</button></div><div class="col-sm-2 expand-click"><p style="font-size: 15px; margin:0" data-toggle="collapse" data-target="#collapse' + ruleData.number +
+                '"' +
+                'aria-expanded="true" aria-controls="collapse' + ruleData.number + '">' + 'Click to Expand</p></div></div>' +
+                '</h5>' +
+                '</div>' +
+                '<div id="collapse' + ruleData.number + '" class="collapse" aria-labelledby="heading' + ruleData.number +
+                '"' +
+                'data-parent="#accordion">' +
+                '<div class="card-body" style="background-color:#fffef3c4"><pre class="rule-json" id=' + ruleData.number + '>' + JSON.stringify(ruleData, undefined, 4) +
+                '</pre></div>' +
+                '</div>' +
+                '</div>';
 
-
-        function pad(num, size) {
-            var s = "000000" + num;
-            return s.substr(s.length - size);
+            document.getElementById('rules-content').innerHTML += ruleHtml
         }
 
-        function getRules() {
-            (async () => {
-                ruleNumber = 1
-                check = true
-                while (ruleNumber < 200 && check) {
+        $.getJSON("https://raw.githubusercontent.com/pulorsok/ruleviewer/master/rules.json").done(function( data ) {
+            var ruleData = data["rules"]
 
-                    id = pad(ruleNumber, 5);
-                    let ruleData = await $.getJSON(
-                            "https://raw.githubusercontent.com/quark-engine/quark-rules/master/" + id + ".json")
-                        .fail(function () {
-                            check = false
-                        });
-
-
-
-                    ruleHtml =
-                        '<div class="card" id="rule' + id + '">' +
-                        '<div class="card-header" id="heading' + id + '">' +
-                        '<h5 class="mb-0">' +
-                        '<div class="row"><div class="col-sm-10">' +
-                        '<button class="btn btn-link" data-toggle="collapse" data-target="#collapse' + id +
-                        '"' +
-                        'aria-expanded="true" aria-controls="collapse' + id + '">' + ruleData.crime +
-
-                        '</button></div><div class="col-sm-2"><p style="font-size: 15px;">Click to Expand</p></div></div>' +
-                        '</h5>' +
-                        '</div>' +
-                        '<div id="collapse' + id + '" class="collapse" aria-labelledby="heading' + id +
-                        '"' +
-                        'data-parent="#accordion">' +
-                        '<div class="card-body"><pre class="rule-json" id=' + id + '>' + JSON.stringify(ruleData, undefined, 4) +
-                        '</pre></div>' +
-                        '</div>' +
-                        '</div>';
-
-                    document.getElementById('rules-content').innerHTML += ruleHtml
-                    // document.getElementById('rules-content').innerHTML += '<div id="' + id +
-                    //     '" class="card rule-json"><div class="card-body"><div class="container"><pre>' + JSON
-                    //     .stringify(
-                    //         ruleData, undefined, 4) + '</pre></div></div></div>';
-
-                    console.log(ruleNumber)
-                    ruleNumber++;
-
-                }
-            })()
-
-
-        }
-
-        getRules()
-
+            for (var i = 0; i < ruleData.length; i++){
+                var rule = ruleData[i];
+                genHTML(rule)
+            }
+            
+        });
+        
+        rules = document.getElementsByClassName("rule-json")
+        displayRules = []
+    
         $(".rule-label").click(function () {
 
-            rules = document.getElementsByClassName("rule-json")
+            let ruless = document.getElementsByClassName("rule-json")
             var labels = []
             $("input:checkbox[name=label]:checked").each(function () {
                 labels.push($(this).val());
             });
 
-            for (i = 0; i < rules.length; i++) {
+            for (i = 0; i < ruless.length; i++) {
 
-                var obj = JSON.parse(rules[i].innerText)
-                document.getElementById("rule" + rules[i].id).style.display = "none";
+                var obj = JSON.parse(ruless[i].innerText)
+                document.getElementById("rule" + ruless[i].id).style.display = "none";
 
                 if (labels.every(r => obj.label.includes(r))) {
-                    document.getElementById("rule" + rules[i].id).style.display = "block";
+                    document.getElementById("rule" + ruless[i].id).style.display = "block";
                 }
 
             }
 
         })
+
+        function compare(filter){
+            if (filter.includes("AND")){
+                text1 = filter.split("AND")
+
+                operatorRecursive(filter, function(){
+                    console.log("done") 
+                    for (i = 0; i < rules.length; i++) {
+                            
+                            document.getElementById("rule" + rules[i].id).style.display = "none";
+                        }
+                    displayRules.forEach(element => {
+                        document.getElementById(element).style.display = "block"; 
+                    });
+                });
+            }
+        }
+
+        async function operatorRecursive(filter) {
+            displayRules = []
+            filter = filter.toLowerCase()
+            for (i = 0; i < rules.length; i++) {
+                var obj = JSON.parse(rules[i].innerText)
+                // document.getElementById("rule" + rules[i].id).style.display = "none";
+                if (rules[i].innerText.toLowerCase().includes(filter)){
+                    // document.getElementById("rule" + rules[i].id).style.display = "block"; 
+                    displayRules.push("rule" + rules[i].id)  
+                }
+
+            }
+            if (filter.includes(":")){
+                result = filter.split(":")
+                keyword = result[0]
+                search = result[1]
+                // console.log("keyword: " + keyword)
+                
+
+                searchKeys = search.split(" ")
+                
+                if (searchKeys[0] == ""){
+                    searchKeys.shift()
+                }
+
+                // console.log(searchKeys)
+
+                if (keyword == "label"){
+                    for (i = 0; i < rules.length; i++) {
+                        var obj = JSON.parse(rules[i].innerText)
+                        // document.getElementById("rule" + rules[i].id).style.display = "none";
+                        if (searchKeys.every(r => obj[keyword].includes(r))){
+                            // document.getElementById("rule" + rules[i].id).style.display = "block";
+                            displayRules.push("rule" + rules[i].id)
+                        }
+                    }
+                }
+
+                if (keyword == "crime"){
+                    for (i = 0; i < rules.length; i++) {
+                        var obj = JSON.parse(rules[i].innerText)
+                        // document.getElementById("rule" + rules[i].id).style.display = "none";
+                        if (searchKeys.every(r => obj[keyword].toLowerCase().includes(r))){
+                            // document.getElementById("rule" + rules[i].id).style.display = "block";
+                            displayRules.push("rule" + rules[i].id)
+                        }
+                    }
+                }
+
+                if (keyword.includes(".")){
+                    r = keyword.split(".")
+                    api_key = r[0]
+                    md_key = r[1]
+
+
+
+                    if (api_key == "api"){
+                        
+                        for (i = 0; i < rules.length; i++) {
+                            var obj = JSON.parse(rules[i].innerText)
+                            // document.getElementById("rule" + rules[i].id).style.display = "none";
+                            if (searchKeys.every(r => JSON.stringify(obj.api[0][md_key]).toLowerCase().includes(r)) ||
+                                searchKeys.every(r => JSON.stringify(obj.api[1][md_key]).toLowerCase().includes(r))
+                            ){
+                                // document.getElementById("rule" + rules[i].id).style.display = "block";  
+                                displayRules.push("rule" + rules[i].id) 
+                            }
+                        }
+                    }
+
+                    if (api_key == "api1"){
+                        for (i = 0; i < rules.length; i++) {
+                            var obj = JSON.parse(rules[i].innerText)
+                            // document.getElementById("rule" + rules[i].id).style.display = "none";
+                            if (searchKeys.every(r =>JSON.stringify(obj.api[0][md_key]).toLowerCase().includes(r))){
+                                // document.getElementById("rule" + rules[i].id).style.display = "block";   
+                                displayRules.push("rule" + rules[i].id)
+                            }
+                        }
+                    }
+
+                    if (api_key == "api2"){
+                        for (i = 0; i < rules.length; i++) {
+                            var obj = JSON.parse(rules[i].innerText)
+                            // document.getElementById("rule" + rules[i].id).style.display = "none";
+                            if (searchKeys.every(r => JSON.stringify(obj.api[1][md_key]).toLowerCase().includes(r))){
+                                // document.getElementById("rule" + rules[i].id).style.display = "block";
+                                displayRules.push("rule" + rules[i].id)   
+                            }
+                        }
+                    }
+                    
+                }
+
+                if (keyword == "api"){
+                    for (i = 0; i < rules.length; i++) {
+                        var obj = JSON.parse(rules[i].innerText)
+                        // document.getElementById("rule" + rules[i].id).style.display = "none";
+                        if (searchKeys.every(r => JSON.stringify(obj[keyword]).toLowerCase().includes(r))){
+                            // document.getElementById("rule" + rules[i].id).style.display = "block";   
+                            displayRules.push("rule" + rules[i].id)
+                        }
+                    }
+                }
+
+                if (keyword == "api1"){
+                    for (i = 0; i < rules.length; i++) {
+                        var obj = JSON.parse(rules[i].innerText)
+                        // document.getElementById("rule" + rules[i].id).style.display = "none";
+                        if (searchKeys.every(r =>JSON.stringify(obj.api[0]).toLowerCase().includes(r))){
+                            // document.getElementById("rule" + rules[i].id).style.display = "block";
+                            displayRules.push("rule" + rules[i].id)   
+                        }
+                    }
+                }
+
+                if (keyword == "api2"){
+                    for (i = 0; i < rules.length; i++) {
+                        var obj = JSON.parse(rules[i].innerText)
+                        // document.getElementById("rule" + rules[i].id).style.display = "none";
+                        if (searchKeys.every(r => JSON.stringify(obj.api[1]).toLowerCase().includes(r))){
+                            // document.getElementById("rule" + rules[i].id).style.display = "block";  
+                            displayRules.push("rule" + rules[i].id) 
+                        }
+                    }
+                }
+            
+            }
+
+            return displayRules
+            // callback();
+        }
+
+        function highlightSearchText(ruleHTML, textList) {
+            var innerHTML = ruleHTML.innerHTML;
+            const text = "Find"
+
+            textList.forEach(element => {
+                var index = innerHTML.indexOf(text);
+                if (index >= 0) { 
+                    innerHTML = innerHTML.substring(0,index) + "<span class='highlight'>" + innerHTML.substring(index,index+text.length) + "</span>" + innerHTML.substring(index + text.length);
+                    ruleHTML.innerHTML = innerHTML;
+                } else {
+                    ruleHTML.innerHTML = innerHTML.replace("<span class='highlight'>", "").replace("</span>", "");
+                }
+            });
+        }
+
+        function searchFilter() {
+            text = "not a and b or a and b "
+            // Declare variables
+            var input, filter, ul, li, a, i, txtValue;
+            const operatorList = [
+                "and",
+                "or",
+                "not"
+            ]
+            input = document.getElementById('myInput');
+            filter = input.value;
+
+            (async function(){
+                let final = []
+                let ruleList1
+                let ruleList2
+                let ruleList3
+
+                final = await operatorRecursive(filter)
+                if (filter.includes("AND")){
+                    [text1, ...rest] = filter.split(" AND ")
+                    text2 = rest[0]
+                    // text2 = rest.join(' AND ');
+                    console.log(text1)
+                    console.log(text2)
+                    ruleList1 = await operatorRecursive(text1)
+
+                    if (rest.includes("AND")){
+                        // text = filter.split(" AND ")
+                        text1 = rest[0]
+                        text2 = rest[1]
+                        list1 = await operatorRecursive(text1)
+                        list2 = await operatorRecursive(text2)
+                        ruleList1 = list1.filter(value => list2.includes(value));
+                        
+                    }
+                    if (text2.includes("OR")){
+                        text = filter.split(" OR ")
+                        text1 = text[0]
+                        text2 = text[1]
+                        list1 = await operatorRecursive(text1)
+                        list2 = await operatorRecursive(text2)
+
+                        ruleList1 = list1.concat(list2);
+                    }
+                    
+                    ruleList2 = await operatorRecursive(text2)
+                    final = ruleList1.filter(value => ruleList2.includes(value));
+                }
+                if (filter.includes("OR")){
+                    [text1, ...rest] = filter.split(" OR ")
+                    text2 = rest[0]
+                    ruleList1 = await operatorRecursive(text1)
+
+                    if (text2.includes("AND")){
+                        text = filter.split(" AND ")
+                        text1 = text[0]
+                        text2 = text[1]
+                        list1 = await operatorRecursive(text1)
+                        list2 = await operatorRecursive(text2)
+
+                        ruleList1 = list1.filter(value => list2.includes(value));
+                        
+                    }
+                    if (text2.includes("OR")){
+                        text = filter.split(" OR ")
+                        text1 = text[0]
+                        text2 = text[1]
+                        list1 = await operatorRecursive(text1)
+                        list2 = await operatorRecursive(text2)
+
+                        ruleList1 = list1.concat(list2);
+                    }
+
+                    ruleList2 = await operatorRecursive(text2)
+                    final = ruleList1.concat(ruleList2)
+                }
+
+                // let rulelist = await operatorRecursive(filter)
+                for (i = 0; i < rules.length; i++) {
+                    document.getElementById("rule" + rules[i].id).style.display = "none";
+                }
+                console.log(final)
+                final.forEach(element => {
+                    document.getElementById(element).style.display = "block"; 
+                });
+            })();
+
+            console.log("done") 
+        }
     </script>
 
 </body>
