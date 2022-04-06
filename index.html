@@ -383,23 +383,22 @@
     
         $(".rule-label").click(function () {
 
-            let ruless = document.getElementsByClassName("rule-json")
+            let rules = document.getElementsByClassName("rule-json")
             var labels = []
             $("input:checkbox[name=label]:checked").each(function () {
                 labels.push($(this).val());
             });
+            for (i = 0; i < rules.length; i++) {
 
-            for (i = 0; i < ruless.length; i++) {
-
-                var obj = JSON.parse(ruless[i].innerText)
-                document.getElementById("rule" + ruless[i].id).style.display = "none";
-
+                var obj = JSON.parse(rules[i].innerText)
+                document.getElementById("rule" + rules[i].id).style.display = "none";
                 if (labels.every(r => obj.label.includes(r))) {
-                    document.getElementById("rule" + ruless[i].id).style.display = "block";
+                    document.getElementById("rule" + rules[i].id).style.display = "block";
+                }else{
+                    // document.getElementById("rule" + ruless[i].id).style.display = "none";
                 }
 
             }
-
         })
 
         function compare(filter){
@@ -407,7 +406,7 @@
                 text1 = filter.split("AND")
 
                 operatorRecursive(filter, function(){
-                    console.log("done") 
+                    // console.log("done") 
                     for (i = 0; i < rules.length; i++) {
                             
                             document.getElementById("rule" + rules[i].id).style.display = "none";
@@ -552,29 +551,29 @@
             // callback();
         }
 
-        function highlightSearchText(ruleHTML, textList) {
-            var innerHTML = ruleHTML.innerHTML;
-            const text = "Find"
-
-            textList.forEach(element => {
-                var index = innerHTML.indexOf(text);
-                if (index >= 0) { 
-                    innerHTML = innerHTML.substring(0,index) + "<span class='highlight'>" + innerHTML.substring(index,index+text.length) + "</span>" + innerHTML.substring(index + text.length);
-                    ruleHTML.innerHTML = innerHTML;
-                } else {
-                    ruleHTML.innerHTML = innerHTML.replace("<span class='highlight'>", "").replace("</span>", "");
-                }
+        function labelFilter() {
+            let rules = document.getElementsByClassName("rule-json")
+            var labels = []
+            $("input:checkbox[name=label]:checked").each(function () {
+                labels.push($(this).val());
             });
+            for (i = 0; i < rules.length; i++) {
+                var obj = JSON.parse(rules[i].innerText)
+                document.getElementById("rule" + rules[i].id).style.display = "none";
+                if (labels.every(r => obj.label.includes(r))) {
+                    document.getElementById("rule" + rules[i].id).style.display = "block";
+                }
+            }
         }
 
         function searchFilter() {
+            console.log("search")
             text = "not a and b or a and b "
             // Declare variables
             var input, filter, ul, li, a, i, txtValue;
             const operatorList = [
-                "and",
-                "or",
-                "not"
+                "AND",
+                "OR"
             ]
             input = document.getElementById('myInput');
             filter = input.value;
@@ -586,77 +585,82 @@
                 let ruleList3
 
                 final = await operatorRecursive(filter)
-                if (filter.includes("AND")){
-                    [text1, ...rest] = filter.split(" AND ")
-                    text2 = rest[0]
-                    // text2 = rest.join(' AND ');
-                    console.log(text1)
-                    console.log(text2)
-                    ruleList1 = await operatorRecursive(text1)
 
-                    if (rest.includes("AND")){
-                        // text = filter.split(" AND ")
-                        text1 = rest[0]
-                        text2 = rest[1]
-                        list1 = await operatorRecursive(text1)
-                        list2 = await operatorRecursive(text2)
-                        ruleList1 = list1.filter(value => list2.includes(value));
+                operatorMap = {}
+
+                splited = filter.split(" ")
+
+                splited.forEach(element => {
+                    if (element.includes(":")){
                         
                     }
-                    if (text2.includes("OR")){
-                        text = filter.split(" OR ")
-                        text1 = text[0]
-                        text2 = text[1]
-                        list1 = await operatorRecursive(text1)
-                        list2 = await operatorRecursive(text2)
+                });
 
-                        ruleList1 = list1.concat(list2);
+                new_splited = []
+
+                for (let index = 0; index < splited.length; index++) {
+                    const element = splited[index];
+                    if (element.includes(":")){
+                        if (splited[index+1] == "AND" || splited[index+1] == "OR"){
+                            new_splited.push(element)
+                            continue
+                        }
+
+                        if (splited[index+1] == undefined){
+                            new_splited.push(element);
+                            continue
+                        }
+                        new_splited.push(element + splited[index+1]);
+                        index++;
+                        continue
                     }
                     
-                    ruleList2 = await operatorRecursive(text2)
-                    final = ruleList1.filter(value => ruleList2.includes(value));
+                    new_splited.push(element)
+                    
                 }
-                if (filter.includes("OR")){
-                    [text1, ...rest] = filter.split(" OR ")
-                    text2 = rest[0]
-                    ruleList1 = await operatorRecursive(text1)
-
-                    if (text2.includes("AND")){
-                        text = filter.split(" AND ")
-                        text1 = text[0]
-                        text2 = text[1]
-                        list1 = await operatorRecursive(text1)
-                        list2 = await operatorRecursive(text2)
-
-                        ruleList1 = list1.filter(value => list2.includes(value));
-                        
+                var temp = null
+                for (let index = 0; index < new_splited.length; index++) {
+                    const element = new_splited[index];
+                    if (index == 0){
+                        temp = await operatorRecursive(element)
                     }
-                    if (text2.includes("OR")){
-                        text = filter.split(" OR ")
-                        text1 = text[0]
-                        text2 = text[1]
-                        list1 = await operatorRecursive(text1)
-                        list2 = await operatorRecursive(text2)
-
-                        ruleList1 = list1.concat(list2);
+                    if (element == "AND") {
+                        console.log("AND")
+                        console.log(new_splited[index+1])
+                        list2 = await operatorRecursive(new_splited[index+1])
+                        temp = temp.filter(value => list2.includes(value));
                     }
-
-                    ruleList2 = await operatorRecursive(text2)
-                    final = ruleList1.concat(ruleList2)
+                    
+                    if (element == "OR") {
+                        console.log("OR")
+                        console.log(new_splited[index+1])
+                        list2 = await operatorRecursive(new_splited[index+1])
+                        temp = temp.concat(list2);
+                    }
                 }
 
-                // let rulelist = await operatorRecursive(filter)
+                final = temp
+
                 for (i = 0; i < rules.length; i++) {
                     document.getElementById("rule" + rules[i].id).style.display = "none";
                 }
-                console.log(final)
                 final.forEach(element => {
                     document.getElementById(element).style.display = "block"; 
+
+                    let rule_number = element.replace("rule", "")
+                    let rule_obj = document.getElementById(rule_number)
+                    var obj = JSON.parse(rule_obj.innerText)
+                    var labels = []
+                    $("input:checkbox[name=label]:checked").each(function () {
+                        labels.push($(this).val());
+                    });
+                    if (!labels.every(r => obj.label.includes(r))) {
+                        document.getElementById(element).style.display = "none";
+                    }
+                    
                 });
             })();
-
-            console.log("done") 
-        }
+        };
     </script>
 
 </body>
